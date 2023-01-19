@@ -1,4 +1,4 @@
-package com.example.demo.data;
+package com.example.demo.persistence;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
@@ -55,5 +55,14 @@ public class ICAOData {
     private String name;
     @JsonProperty("url")
     private String url;
+
+    @Override
+    public boolean equals(Object o) {
+        if(!o.getClass().equals(this.getClass()))
+            return false;
+        else {
+            return ((ICAOData) o).getIcao().equals(this.getIcao());
+        }
+    }
 
 }

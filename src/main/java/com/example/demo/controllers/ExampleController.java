@@ -1,6 +1,8 @@
 package com.example.demo.controllers;
 
-import com.example.demo.data.ICAOData;
+import com.example.demo.persistence.ICAOData;
+import com.example.demo.services.ExampleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,10 +12,18 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RestController
 public class ExampleController {
 
-    private final WebClient client = WebClient.builder().baseUrl("https://airport-web.appspot.com/_ah/api/airportsapi/v1/airports").build();
+    public ExampleController(ExampleService service) {
+        this.service = service;
+    }
+
+    @Autowired
+    private final ExampleService service;
 
     /**
      * Simple mono object to test response
@@ -32,7 +42,7 @@ public class ExampleController {
 
     @GetMapping("/airport")
     public Mono<ICAOData> singleAirport() {
-        return client.get().uri("/EDLW").accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(ICAOData.class);
+        return service.getSingleAirport("EDLW");
     }
 
     /**
@@ -53,10 +63,10 @@ public class ExampleController {
      */
 
     @GetMapping("/airports")
-    Flux<ICAOData> multipleAirports() {
-        Flux<ICAOData> one = client.get().uri("/EDLW").accept(MediaType.APPLICATION_JSON).retrieve().bodyToFlux(ICAOData.class);
-        Flux<ICAOData> two = client.get().uri("/EDDE").accept(MediaType.APPLICATION_JSON).retrieve().bodyToFlux(ICAOData.class);
-        return one.concatWith(two);
+    List<Mono<ICAOData>> multipleAirports() {
+        Mono<ICAOData> one = service.getSingleAirport("EDLW");
+        Mono<ICAOData> two = service.getSingleAirport("EDDE");
+        return Arrays.asList(one, two);
     }
 
 }
