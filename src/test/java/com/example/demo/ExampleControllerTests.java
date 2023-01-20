@@ -35,10 +35,9 @@ public class ExampleControllerTests {
 
     @Test
     public void testGetAirports() throws Exception {
-        ICAOData airportOne = new ICAOData("EDLW", "something", "something", "something");
-        ICAOData airportTwo = new ICAOData("EDDE", "something", "something", "something");
         this.webTestClient.get().uri("/airports").accept(MediaType.APPLICATION_JSON).exchange()
-                .expectStatus().isOk();
+                .expectStatus().isOk()
+                .expectBodyList(ICAOData.class);
     }
 
 
