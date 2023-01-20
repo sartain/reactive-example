@@ -25,6 +25,7 @@ public class ExampleController {
         return route()
                 .GET("/mono", r -> ServerResponse.ok().body(Mono.just("Hello"), String.class))
                 .GET("/plane", r -> ServerResponse.ok().body(exampleService.getSingleAirport("EDLW"), ICAOData.class))
+                .GET("/airport/{airport}", r -> ServerResponse.ok().body(exampleService.getSingleAirport(r.pathVariable("airport")), ICAOData.class))
                 .GET("/airport", r -> ServerResponse.ok().body(exampleService.getSingleAirport("EDLW"), ICAOData.class))
                 .GET("/airports", r -> ServerResponse.ok().body(Flux.concat(Arrays.asList(exampleService.getSingleAirport("EDLW"),
                                 exampleService.getSingleAirport("EDDE"))), ICAOData.class))

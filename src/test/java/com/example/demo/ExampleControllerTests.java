@@ -18,9 +18,17 @@ public class ExampleControllerTests {
     private WebTestClient webTestClient;
 
     @Test
-    public void testGetSingleAirpotr() throws Exception {
+    public void testGetSingleAirport() throws Exception {
         ICAOData icaoData = new ICAOData("EDLW", "something", "something", "something");
         this.webTestClient.get().uri("/airport").accept(MediaType.APPLICATION_JSON).exchange()
+                .expectStatus().isOk()
+                .expectBody(ICAOData.class).isEqualTo(icaoData);
+    }
+
+    @Test
+    public void testGetSingleAirportPathVariable() throws Exception {
+        ICAOData icaoData = new ICAOData("EDDE", "something", "something", "something");
+        this.webTestClient.get().uri("/airport/EDDE").accept(MediaType.APPLICATION_JSON).exchange()
                 .expectStatus().isOk()
                 .expectBody(ICAOData.class).isEqualTo(icaoData);
     }
