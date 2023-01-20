@@ -7,6 +7,8 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
+import reactor.core.publisher.Mono;
 
 import java.lang.reflect.Array;
 
@@ -46,6 +48,15 @@ public class ExampleControllerTests {
         this.webTestClient.get().uri("/airports").accept(MediaType.APPLICATION_JSON).exchange()
                 .expectStatus().isOk()
                 .expectBodyList(ICAOData.class);
+    }
+
+    @Test
+    public void testPostAirport() throws Exception {
+        ICAOData dataToAdd = new ICAOData("EDLW", "something", "something", "something");
+        this.webTestClient.post().uri("/airport").accept(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(dataToAdd))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(ICAOData.class).isEqualTo(dataToAdd);
     }
 
 

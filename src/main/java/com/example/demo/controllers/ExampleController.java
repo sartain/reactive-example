@@ -29,6 +29,7 @@ public class ExampleController {
                 .GET("/airport", r -> ServerResponse.ok().body(exampleService.getSingleAirport("EDLW"), ICAOData.class))
                 .GET("/airports", r -> ServerResponse.ok().body(Flux.concat(Arrays.asList(exampleService.getSingleAirport("EDLW"),
                                 exampleService.getSingleAirport("EDDE"))), ICAOData.class))
+                .POST("/airport", r -> ServerResponse.ok().body(r.bodyToMono(ICAOData.class), ICAOData.class))
                 .build();
     }
 
