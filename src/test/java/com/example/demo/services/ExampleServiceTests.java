@@ -1,7 +1,6 @@
 package com.example.demo.services;
 
-import com.example.demo.controllers.ExampleController;
-import com.example.demo.persistence.ICAOData;
+import com.example.demo.persistence.IcaoData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -36,13 +35,13 @@ public class ExampleServiceTests {
 
     @Test
     public void test_getPost() throws Exception {
-        ICAOData icaoData = new ICAOData("EDLW", "something", "something", "something");
+        IcaoData icaoData = new IcaoData("EDLW", "something", "something", "something");
         when(webClientMock.get()).thenReturn(requestHeadersUriSpecMock);
         when(requestHeadersUriSpecMock.uri(anyString())).thenReturn(requestHeadersSpecMock);
         when(requestHeadersSpecMock.retrieve()).thenReturn(responseSpecMock);
         when(responseSpecMock.bodyToMono(
-                ArgumentMatchers.<Class<ICAOData>>notNull())).thenReturn(Mono.just(icaoData));
-        Mono<ICAOData> response = serviceMock.getSingleAirport("EDLW");
+                ArgumentMatchers.<Class<IcaoData>>notNull())).thenReturn(Mono.just(icaoData));
+        Mono<IcaoData> response = serviceMock.getSingleAirport("EDLW");
         Assertions.assertEquals("EDLW", response.block().getIcao());
     }
 

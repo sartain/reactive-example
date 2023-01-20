@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ICAOData {
+public class IcaoData {
 
-    public ICAOData() {}
+    public IcaoData() {}
 
-    public ICAOData(String icao, String lastUpdate, String name, String url) {
+    public IcaoData(String icao, String lastUpdate, String name, String url) {
         this.icao = icao;
         this.lastUpdate = lastUpdate;
         this.name = name;
@@ -61,7 +61,7 @@ public class ICAOData {
         if(!o.getClass().equals(this.getClass()))
             return false;
         else {
-            return ((ICAOData) o).getIcao().equals(this.getIcao());
+            return ((IcaoData) o).getIcao().equals(this.getIcao());
         }
     }
 

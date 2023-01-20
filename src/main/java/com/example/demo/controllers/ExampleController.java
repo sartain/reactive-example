@@ -1,8 +1,7 @@
 package com.example.demo.controllers;
 
-import com.example.demo.persistence.ICAOData;
+import com.example.demo.persistence.IcaoData;
 import com.example.demo.services.ExampleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,12 +23,12 @@ public class ExampleController {
     RouterFunction<ServerResponse> routes(ExampleService exampleService) {
         return route()
                 .GET("/mono", r -> ServerResponse.ok().body(Mono.just("Hello"), String.class))
-                .GET("/plane", r -> ServerResponse.ok().body(exampleService.getSingleAirport("EDLW"), ICAOData.class))
-                .GET("/airport/{airport}", r -> ServerResponse.ok().body(exampleService.getSingleAirport(r.pathVariable("airport")), ICAOData.class))
-                .GET("/airport", r -> ServerResponse.ok().body(exampleService.getSingleAirport("EDLW"), ICAOData.class))
+                .GET("/plane", r -> ServerResponse.ok().body(exampleService.getSingleAirport("EDLW"), IcaoData.class))
+                .GET("/airport/{airport}", r -> ServerResponse.ok().body(exampleService.getSingleAirport(r.pathVariable("airport")), IcaoData.class))
+                .GET("/airport", r -> ServerResponse.ok().body(exampleService.getSingleAirport("EDLW"), IcaoData.class))
                 .GET("/airports", r -> ServerResponse.ok().body(Flux.concat(Arrays.asList(exampleService.getSingleAirport("EDLW"),
-                                exampleService.getSingleAirport("EDDE"))), ICAOData.class))
-                .POST("/airport", r -> ServerResponse.ok().body(r.bodyToMono(ICAOData.class), ICAOData.class))
+                                exampleService.getSingleAirport("EDDE"))), IcaoData.class))
+                .POST("/airport", r -> ServerResponse.ok().body(r.bodyToMono(IcaoData.class), IcaoData.class))
                 .build();
     }
 
@@ -39,9 +38,9 @@ public class ExampleController {
      */
 
     @GetMapping("/airport/nonmono")
-    ResponseEntity<ICAOData> singleAirportMvc() {
+    ResponseEntity<IcaoData> singleAirportMvc() {
         RestTemplate rt = new RestTemplate();
-        return rt.getForEntity("https://airport-web.appspot.com/_ah/api/airportsapi/v1/airports/EDDE", ICAOData.class);
+        return rt.getForEntity("https://airport-web.appspot.com/_ah/api/airportsapi/v1/airports/EDDE", IcaoData.class);
     }
 
 }
