@@ -26,4 +26,12 @@ public class ExampleControllerTests {
                 .expectBody(ICAOData.class).isEqualTo(icaoData);
     }
 
+    @Test
+    public void test_Route() throws Exception {
+        ICAOData icaoData = new ICAOData("EDLW", "something", "something", "something");
+        this.webTestClient.get().uri("/plane").accept(MediaType.APPLICATION_JSON).exchange()
+                .expectStatus().isOk()
+                .expectBody(ICAOData.class).isEqualTo(icaoData);
+    }
+
 }

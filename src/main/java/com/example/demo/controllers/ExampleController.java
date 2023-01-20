@@ -3,17 +3,20 @@ package com.example.demo.controllers;
 import com.example.demo.persistence.ICAOData;
 import com.example.demo.services.ExampleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
+import org.springframework.web.reactive.function.server.RouterFunction;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 import java.util.List;
+
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
+import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @RestController
 public class ExampleController {
@@ -24,6 +27,12 @@ public class ExampleController {
 
     @Autowired
     private final ExampleService service;
+
+    @Bean
+    RouterFunction<ServerResponse> routes(ExampleService exampleService) {
+        return route().GET("/plane", r -> ServerResponse.ok().body(exampleService.getSingleAirport("EDLW"), ICAOData.class))
+                .build();
+    }
 
     /**
      * Simple mono object to test response
