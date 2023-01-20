@@ -34,6 +34,13 @@ public class ExampleController {
                 .build();
     }
 
+    /*Equivalent to
+    @GetMapping("/plane")
+    Mono<ServerResponse> getPlane() {
+        return ServerResponse.ok().body(service.getSingleAirport("EDLW"), ICAOData.class);
+    }
+    */
+
     /**
      * Simple mono object to test response
      * @return Mono<String> string
