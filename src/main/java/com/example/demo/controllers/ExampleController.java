@@ -20,13 +20,6 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @RestController
 public class ExampleController {
 
-    public ExampleController(ExampleService service) {
-        this.service = service;
-    }
-
-    @Autowired
-    private final ExampleService service;
-
     @Bean
     RouterFunction<ServerResponse> routes(ExampleService exampleService) {
         return route()
