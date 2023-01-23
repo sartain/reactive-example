@@ -20,7 +20,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class ExampleController {
 
     @Bean
-    RouterFunction<ServerResponse> routes(ExampleService exampleService) {
+    RouterFunction<ServerResponse> exampleRoutes(ExampleService exampleService) {
         return route()
                 .GET("/mono", r -> ServerResponse.ok().body(Mono.just("Hello"), String.class))
                 .GET("/plane", r -> ServerResponse.ok().body(exampleService.getSingleAirport("EDLW"), IcaoData.class))
