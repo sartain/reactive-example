@@ -18,6 +18,10 @@ public class MvcScoreService {
     Properties consumerProperties;
     KafkaConsumer<String, String> consumer;
 
+    /**
+     * Setup a Kafka Consumer
+     */
+
     public MvcScoreService() {
         consumerProperties = new Properties();
         consumerProperties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
@@ -26,11 +30,17 @@ public class MvcScoreService {
         consumerProperties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "score_group");
         consumerProperties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         consumer = new KafkaConsumer<String, String>(consumerProperties);
+        consumer.subscribe(List.of("scores"));
     }
+
+    /**
+     * Get the kafka consumer to poll for any score updates
+     * Map the results into an array list to return
+     * @return List of scores
+     */
 
     public List<String> getScores() {
         List<String> scores = new ArrayList<>();
-        consumer.subscribe(List.of("scores"));
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
         for(ConsumerRecord<String, String> record : records) {
             scores.add(record.value());
