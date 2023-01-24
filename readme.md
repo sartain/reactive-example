@@ -7,3 +7,4 @@ The 3rd party API is called reactively, with links on reactive spring below
 - [Spring WebClient Testing](https://www.learninjava.com/4-ways-to-test-webclient-mocking/)
 - [Spring Reactive course](https://learning.oreilly.com/videos/reactive-spring-boot/9780137831463/)
 - [Spring Reactive POST request](https://stackoverflow.com/questions/62073018/spring-webclient-post-method-body)
+- [Reactive Kafka](https://projectreactor.io/docs/kafka/release/reference/#_reactive_api_for_kafka)
