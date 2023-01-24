@@ -65,6 +65,8 @@ marp: true
 
 # WebFlux example
 
+Plan of execution when retrieving a premier league score
+
 ```java
     public Flux<Score> getSundayLeagueScores() {
         return scoreDao.getScores("sunday-league");
