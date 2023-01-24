@@ -1,7 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.persistence.IcaoData;
-import com.example.demo.services.ExampleService;
+import com.example.demo.services.IcaoService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +17,10 @@ import java.util.Arrays;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @RestController
-public class ExampleController {
+public class IcaoController {
 
     @Bean
-    RouterFunction<ServerResponse> exampleRoutes(ExampleService exampleService) {
+    RouterFunction<ServerResponse> exampleRoutes(IcaoService exampleService) {
         return route()
                 .GET("/mono", r -> ServerResponse.ok().body(Mono.just("Hello"), String.class))
                 .GET("/plane", r -> ServerResponse.ok().body(exampleService.getSingleAirport("EDLW"), IcaoData.class))

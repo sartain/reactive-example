@@ -1,20 +1,23 @@
 package com.example.demo.controllers;
 
-import com.example.demo.config.ExampleConsumer;
 import com.example.demo.services.CallInfiniteService;
 import com.example.demo.services.InfiniteService;
-import com.example.demo.services.ScoreService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Flux;
 
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @RestController
 public class InfiniteController {
+
+    /**
+     * Media Type as Text Event Stream keeps asynchronous connection between publisher and subscriber
+     * @param service The service to be called
+     * @return ServerResponse each time a text event occurs in the service call
+     */
 
     @Bean
     RouterFunction<ServerResponse> infiniteRoutes(InfiniteService service) {

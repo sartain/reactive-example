@@ -1,7 +1,6 @@
-package com.example.demo.controllers;
+package com.example.demo.premierleague.controllers;
 
-import com.example.demo.services.CallInfiniteService;
-import com.example.demo.services.ScoreService;
+import com.example.demo.premierleague.services.ScoreService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RestController;

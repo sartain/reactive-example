@@ -1,4 +1,4 @@
-package com.example.demo.config;
+package com.example.demo.premierleague.config;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

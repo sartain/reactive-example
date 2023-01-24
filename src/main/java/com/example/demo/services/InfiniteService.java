@@ -10,6 +10,12 @@ import java.util.stream.Stream;
 @Service
 public class InfiniteService {
 
+    /**
+     * Example of reactive streaming
+     * Generates a stream of 'hello world' updating each second
+     * @return Flux of 'hello world' propagated each second
+     */
+
     public Flux<String> manyHello() {
         return Flux.fromStream(
                 Stream.generate(() -> "Hello World"))

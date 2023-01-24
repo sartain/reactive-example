@@ -31,7 +31,7 @@ public class ExampleServiceTests {
     @Mock
     private WebClient.ResponseSpec responseSpecMock;
     @InjectMocks
-    private ExampleService serviceMock;
+    private IcaoService serviceMock;
 
     @Test
     public void test_getPost() throws Exception {

@@ -7,7 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
-public class ExampleService {
+public class IcaoService {
 
     private final WebClient client = WebClient.builder().baseUrl("https://airport-web.appspot.com/_ah/api/airportsapi/v1/airports").build();
 
