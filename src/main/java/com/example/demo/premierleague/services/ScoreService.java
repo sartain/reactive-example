@@ -6,6 +6,8 @@ import reactor.core.publisher.Flux;
 import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverRecord;
 
+import java.util.List;
+
 @Service
 public class ScoreService {
 
