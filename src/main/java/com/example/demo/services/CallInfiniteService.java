@@ -13,9 +13,6 @@ import java.util.stream.Collectors;
 @Service
 public class CallInfiniteService {
 
-    @Autowired
-    KafkaReceiver<String, String> kafkaReceiver;
-
     private final WebClient client = WebClient.builder().baseUrl("http://localhost:8080").build();
 
     public Flux<String> getInfiniteViaCall() {
@@ -24,14 +21,6 @@ public class CallInfiniteService {
                 .retrieve()
                 .bodyToFlux(String.class)
                 .map(e -> e + "!!!");
-    }
-
-    public Flux<String> getScoresViaCall() {
-        return kafkaReceiver.receive()
-                .checkpoint("start of received")
-                .doOnNext(r -> r.receiverOffset().acknowledge())
-                .map(ReceiverRecord::value)
-                .checkpoint("end of received");
     }
 
 }
