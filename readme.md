@@ -7,4 +7,18 @@ The 3rd party API is called reactively, with links on reactive spring below
 - [Spring WebClient Testing](https://www.learninjava.com/4-ways-to-test-webclient-mocking/)
 - [Spring Reactive course](https://learning.oreilly.com/videos/reactive-spring-boot/9780137831463/)
 - [Spring Reactive POST request](https://stackoverflow.com/questions/62073018/spring-webclient-post-method-body)
+
+## Sunday League
+This is an MVC example in Spring Boot where scores can be:
+- Added with a POST request
+- Retrieved with a GET request
+It is not reactive.
+
+## Premier League
+This is a reactive example in Spring Boot with a '3rd party' Kafka backend.
+Scores can be:
+- Added to a kafka topic using a producer
+- Retrieved asynchronously using a Spring Reactive endpoint 'GET' request
+
+A useful link on reactive kafka can be found here:
 - [Reactive Kafka](https://projectreactor.io/docs/kafka/release/reference/#_reactive_api_for_kafka)
