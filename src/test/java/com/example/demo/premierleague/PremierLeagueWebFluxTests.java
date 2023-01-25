@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,6 +27,7 @@ class PremierLeagueWebFluxTests {
     @MockBean
     private ScoreService service;
 
+    private String[] scoreArray = {"Everton 1-0 Fulham", "Tottenham 2-2 Leeds", "Manchester United 0-3 Crystal Palace"};
 
     @BeforeEach
     void initClient() {
@@ -35,16 +37,17 @@ class PremierLeagueWebFluxTests {
     @Test
     void scoreStreams() {
         when(service.getScoresViaCall())
-                .thenReturn(Flux.just("Everton 1-0 Fulham", "Tottenham 2-2 Leeds", "Manchester United 0-3 Crystal Palace"));
+                .thenReturn(Flux.just(scoreArray));
 
-        List<String> scores = webClient.get().uri("/kafka/webflux")
+        List<String> scoreList = webClient.get().uri("/kafka/webflux")
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .exchange()
                 .expectStatus().is2xxSuccessful()
                 .expectBodyList(String.class)
                 .returnResult()
                 .getResponseBody();
-        assertEquals(3, scores.size());
-        scores.forEach(System.out::println);
+        assertEquals(3, scoreList.size());
+        scoreList.forEach(System.out::println);
+        assertEquals(scoreList, Arrays.asList(scoreArray));
     }
 }
