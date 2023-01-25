@@ -15,3 +15,20 @@
 - Example = Consumer which retrieves score update for display purposes
 - If kafka backend goes down, the non-blocking asynchronous API will remain
 - If API goes down, the kafka consumer with the related group name will retrieve all messages missed
+
+## Setup
+- Start Zookeeper and Kafka
+- Create Kafka topic `scores` if not already created
+- Create and launch Kafka Producer
+- Make API call to the reactive endpoint
+- Add score updates to the producer
+- View results in reactive endpoint
+
+## Things to try
+- Shut down Kafka server and view the call to the endpoint
+  - Attempt another endpoint call
+  - Restart Kafka server
+- Shut down endpoint call
+  - Make score updates using Kafka Producer
+  - Restart application endpoint
+  - View missed calls appearing
