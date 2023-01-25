@@ -15,12 +15,24 @@ import java.util.*;
 public class ExampleConsumer {
 
     @Bean
-    public KafkaReceiver<String, String> kafkaReceiver() {
+    public KafkaReceiver<String, String> kafkaScoreReceiver() {
         Map<String, Object> consumerProperties = new HashMap<>();
         consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
         consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         consumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "scores");
+        consumerProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
+        return new DefaultKafkaReceiver(ConsumerFactory.INSTANCE, ReceiverOptions.create(consumerProperties).subscription(Collections.singleton("scores")));
+    }
+
+    @Bean
+    public KafkaReceiver<String, String> kafkaScoreReceiver2() {
+        Map<String, Object> consumerProperties = new HashMap<>();
+        consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+        consumerProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        consumerProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, "goals");
         consumerProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         consumerProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);
         return new DefaultKafkaReceiver(ConsumerFactory.INSTANCE, ReceiverOptions.create(consumerProperties).subscription(Collections.singleton("scores")));

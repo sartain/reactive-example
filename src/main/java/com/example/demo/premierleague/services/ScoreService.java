@@ -11,8 +11,13 @@ import java.util.List;
 @Service
 public class ScoreService {
 
+    //Two Kafka Receivers belonging to individual groups meaning they will both consume the same updates
+
     @Autowired
-    KafkaReceiver<String, String> kafkaReceiver;
+    KafkaReceiver<String, String> kafkaScoreReceiver;
+
+    @Autowired
+    KafkaReceiver<String, String> kafkaScoreReceiver2;
 
     /**
      * Receive any data added to the topic
@@ -23,9 +28,16 @@ public class ScoreService {
      */
 
     public Flux<String> getScoresViaCall() {
-        return kafkaReceiver.receive()
+        return kafkaScoreReceiver.receive()
                 .doOnNext(r -> r.receiverOffset().acknowledge())
                 .map(ReceiverRecord::value);
+    }
+
+    public Flux<String> getModifiedScoresViaCall() {
+        return kafkaScoreReceiver2.receive()
+                .doOnNext(r -> r.receiverOffset().acknowledge())
+                .map(ReceiverRecord::value)
+                .map(r -> "GOAL UPDATE: " + r);
     }
 
 }
