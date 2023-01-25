@@ -2,7 +2,6 @@ package com.example.demo.premierleague.controllers;
 
 import com.example.demo.premierleague.services.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -23,8 +22,11 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 @RestController
 public class WebFluxScoreController {
 
-    @Autowired
     private ScoreService scoreService;
+
+    public WebFluxScoreController(ScoreService scoreService) {
+        this.scoreService = scoreService;
+    }
 
     @Bean
     RouterFunction<ServerResponse> getScoresViaKafka() {

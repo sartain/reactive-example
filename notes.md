@@ -15,3 +15,4 @@
     - JSON array = finite & accumulate all data before returning
     - Text Event Stream / Stream JSON = Request some items from the source, get a stream of information back
     - The connection exists between client/server works for examples like a chatroom
+- Small number of users and low concurrency = not reactive
