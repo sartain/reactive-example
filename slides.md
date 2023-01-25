@@ -41,22 +41,34 @@ marp: true
 
 ---
 
-# Spring MVC Service Example
+# Sunday League Example
+
+There is no need for an asynchronous service as the scores are not updated regularly.
+A service like below would be suitable to retrieve the scores using a `Dao` linked to a database.
 
 ```java
-    public List<Score> getSundayLeagueScores() {
-        return scoreDao.getScores("sunday-league");
-    }
+  public List<Score> getSundayLeagueScores() {
+    return scoreDao.getLatestScores();
+  }
+```
 
+---
+
+# Premier League Example
+
+We could use Spring MVC to request the latest scores from an available endpoint.
+The more people use the `league.com/scores` endpoint, the slower the response will be.
+Each request blocks until we get a response from the site.
+
+```java
     public List<Score> getPremierLeagueScores() {
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<List<Score>> response = restTemplate.exchange("http://premierleague.com/scores",
+        ResponseEntity<List<Score>> response = restTemplate.exchange("http://league.com/scores",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Score>>(){});
 
         List<Score> result = response.getBody();
-        result.forEach(result -> log.info(result.toString()));
         return result;
     }
 ```
