@@ -33,9 +33,9 @@ public class WebFluxScoreController {
         return ResponseEntity.ok(scoreService.getScoresViaCall());
     }
 
-    @GetMapping(value = "/kafka/webflux/scoreupdate", produces = "text/event-stream")
-    ResponseEntity<Flux<String>> getKafkaScoresModified() {
-        return ResponseEntity.ok(scoreService.getModifiedScoresViaCall());
+    @GetMapping(value = "/kafka/webflux/teams", produces = "text/event-stream")
+    ResponseEntity<Flux<String>> getKafkaTeams() {
+        return ResponseEntity.ok(scoreService.getTeamNamesInCall());
     }
 
 }

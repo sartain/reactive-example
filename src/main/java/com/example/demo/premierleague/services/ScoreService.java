@@ -33,11 +33,26 @@ public class ScoreService {
                 .map(ReceiverRecord::value);
     }
 
-    public Flux<String> getModifiedScoresViaCall() {
+    public Flux<String> getTeamNamesInCall() {
         return kafkaScoreReceiver2.receive()
                 .doOnNext(r -> r.receiverOffset().acknowledge())
                 .map(ReceiverRecord::value)
-                .map(r -> "GOAL UPDATE: " + r);
+                .map(this::formatExample);
+    }
+
+    private String formatExample(String input) {
+        String[] teamAndResult = input.split("-");
+        String homeTeam = givenTeamAndResultReturnTeam(teamAndResult[0], true);
+        String awayTeam = givenTeamAndResultReturnTeam(teamAndResult[1], false);
+        return homeTeam + "," + awayTeam;
+    }
+
+
+    private String givenTeamAndResultReturnTeam(String input, boolean home) {
+        int index = 1;
+        if(home)
+            index = 0;
+        return input.split("\\d+")[index].strip();
     }
 
 }
