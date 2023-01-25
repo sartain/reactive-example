@@ -25,23 +25,23 @@ marp: true
 
 # Example
 
-## Live Score Update Application
+## Score Update Application
 
 - Local Sunday League
 
-  - Results are added to a database after the final score is confirmed
-  - Results can be added hours after a game
-  - Hundreds of people are interested in the results in the hours or days after
+  - Games are scored by the referee and handed in to league official after the game
+  - After all games are played, the league official adds the results to the system
+  - Hundreds of people are interested in the results
 
-- Premier League
+- Professional League
 
-  - Goals are added to a database as soon as they happen
-  - In-depth statistics are added to a database every minute during the 90 minute game
+  - Game events are scored throughout the game
+  - During the game, score updates and events are added to the system
   - Millions of people are interested in the game events as soon as they happen
 
 ---
 
-# Spring MVC Example
+# Spring MVC Service Example
 
 ```java
     public List<Score> getSundayLeagueScores() {
@@ -65,8 +65,6 @@ marp: true
 
 # WebFlux example
 
-Plan of execution when retrieving a premier league score
-
 ```java
     public Flux<Score> getSundayLeagueScores() {
         return scoreDao.getScores("sunday-league");
@@ -78,8 +76,6 @@ Plan of execution when retrieving a premier league score
         return client.get()
                 .uri("/scores")
                 .retrieve()
-                .bodyToFlux(String.class)
-                .toStream()
-                .forEach(e -> log.info(e));
+                .bodyToFlux(String.class);
     }
 ```
