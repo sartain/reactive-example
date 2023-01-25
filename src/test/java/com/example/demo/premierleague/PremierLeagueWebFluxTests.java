@@ -27,18 +27,30 @@ class PremierLeagueWebFluxTests {
     @MockBean
     private ScoreService service;
 
-    private String[] scoreArray = {"Everton 1-0 Fulham", "Tottenham 2-2 Leeds", "Manchester United 0-3 Crystal Palace"};
-
     @BeforeEach
     void initClient() {
         webClient = WebTestClient.bindToController(new WebFluxScoreController(service)).build();
     }
 
+    /**
+     * Test the stream receives scores
+     * Mock the service linked to kafka to return some mock data
+     * Call the endpoint using mock service and retrieve mock data back
+     * Assert actual mock data equals the expected mock data
+     */
+
     @Test
     void scoreStreams() {
+        //Return Mock data in service response
+        String[] scoreArray = {
+                "Everton 1-0 Fulham",
+                "Tottenham 2-2 Leeds",
+                "Manchester United 0-3 Crystal Palace"
+        };
         when(service.getScoresViaCall())
                 .thenReturn(Flux.just(scoreArray));
 
+        //Call the client using the mock service
         List<String> scoreList = webClient.get().uri("/kafka/webflux")
                 .accept(MediaType.TEXT_EVENT_STREAM)
                 .exchange()
@@ -46,6 +58,8 @@ class PremierLeagueWebFluxTests {
                 .expectBodyList(String.class)
                 .returnResult()
                 .getResponseBody();
+
+        //Test the response from the client using mock service
         assertEquals(3, scoreList.size());
         scoreList.forEach(System.out::println);
         assertEquals(scoreList, Arrays.asList(scoreArray));
