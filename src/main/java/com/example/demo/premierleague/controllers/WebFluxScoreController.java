@@ -63,6 +63,8 @@ public class WebFluxScoreController {
         );
     }
 
+    //Example of an MVC calling the reactive system to get score updates
+
     @GetMapping(value = "/kafka/mvc", produces = "text/event-stream")
     ResponseEntity<List<String>> getKafkaScoresMvc() {
         RestTemplate template = new RestTemplate();

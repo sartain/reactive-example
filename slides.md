@@ -61,13 +61,14 @@ The more people use the `league.com/scores` endpoint, the slower the response wi
 Each request blocks until we get a response from the site.
 
 ```java
-    public List<Score> getPremierLeagueScores() {
+
+    @GetMapping("/scores")
+    ResponseEntity<List<String>> getScores() {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<List<Score>> response = restTemplate.exchange("http://league.com/scores",
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Score>>(){});
-
         List<Score> result = response.getBody();
         return result;
     }
@@ -75,19 +76,25 @@ Each request blocks until we get a response from the site.
 
 ---
 
-# WebFlux example
+# Premier League Example
+
+If the entire application is non-blocking (e.g. not using JDBC) then we can use WebFlux.
+Here is a controller example calling a non-blocking API
 
 ```java
-    public Flux<Score> getSundayLeagueScores() {
-        return scoreDao.getScores("sunday-league");
-    }
 
-    private final WebClient client = WebClient.builder().baseUrl("http://premierleague.com").build();
-
-    public Flux<String> getPremierLeagueScores() {
-        return client.get()
-                .uri("/scores")
+    @GetMapping(value = "/kafka/double", produces = "text/event-stream")
+    ResponseEntity<Flux<String>> getScoreUpdates() {
+        return ResponseEntity.ok(WebClient.builder().build().get()
+                .uri("http://league.com/scores")
                 .retrieve()
-                .bodyToFlux(String.class);
+                .bodyToFlux(String.class)
+        );
     }
 ```
+
+---
+
+# Premier League Kafka Example
+
+## Demo with Kafka and Spring WebFlux
