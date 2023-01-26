@@ -1,7 +1,6 @@
 package com.example.demo.premierleague.controllers;
 
 import com.example.demo.premierleague.services.ScoreService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
@@ -52,17 +50,6 @@ public class WebFluxScoreController {
     @GetMapping(value = "/kafka/webflux/teams", produces = "text/event-stream")
     ResponseEntity<Flux<String>> getKafkaTeams() {
         return ResponseEntity.ok(scoreService.getTeamNamesInCall());
-    }
-
-    //Example of making another call to the API which communicates with Kafka
-
-    @GetMapping(value = "/kafka/double", produces = "text/event-stream")
-    ResponseEntity<Flux<String>> getKafkaScoresViaCall() {
-        return ResponseEntity.ok(WebClient.builder().build().get()
-                .uri("http://localhost:8080/kafka/webflux")
-                .retrieve()
-                .bodyToFlux(String.class)
-        );
     }
 
     //Example of an MVC calling the reactive system to get score updates

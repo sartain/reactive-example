@@ -20,5 +20,7 @@ Scores can be:
 - Added to a kafka topic using a producer
 - Retrieved asynchronously using a Spring Reactive endpoint 'GET' request
 
-A useful link on reactive kafka can be found here:
+Related links:
 - [Reactive Kafka](https://projectreactor.io/docs/kafka/release/reference/#_reactive_api_for_kafka)
+- [Testing a WebFlux stream endpoint](https://blog.rpuch.com/2019/08/29/unit-testing-spring-webflux-streaming-controller.html)
+- [Example vidiprinter / scoring system](https://www.skysports.com/live-scores)
