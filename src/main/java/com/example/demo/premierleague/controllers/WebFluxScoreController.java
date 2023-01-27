@@ -6,6 +6,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -35,6 +36,7 @@ public class WebFluxScoreController {
 
     //Equivalent to above
 
+    @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
     @GetMapping(value = "/kafka/webflux", produces = "text/event-stream")
     ResponseEntity<Flux<String>> getKafkaScores() {
         return ResponseEntity.ok(scoreService.getScoresViaCall());
