@@ -64,4 +64,30 @@ class PremierLeagueWebFluxTests {
         scoreList.forEach(System.out::println);
         assertEquals(scoreList, Arrays.asList(scoreArray));
     }
+
+    @Test
+    void scoreStreamsWithAuth() {
+        //Return Mock data in service response
+        String[] scoreArray = {
+                "Everton 1-0 Fulham",
+                "Tottenham 2-2 Leeds",
+                "Manchester United 0-3 Crystal Palace"
+        };
+        when(service.getScoresViaAuthCall())
+                .thenReturn(Flux.just(scoreArray));
+
+        //Call the client using the mock service
+        List<String> scoreList = webClient.get().uri("/auth/kafka/webflux")
+                .accept(MediaType.TEXT_EVENT_STREAM)
+                .exchange()
+                .expectStatus().is2xxSuccessful()
+                .expectBodyList(String.class)
+                .returnResult()
+                .getResponseBody();
+
+        //Test the response from the client using mock service
+        assertEquals(3, scoreList.size());
+        scoreList.forEach(System.out::println);
+        assertEquals(scoreList, Arrays.asList(scoreArray));
+    }
 }
