@@ -31,6 +31,13 @@ public class ScoreService {
                 .map(ReceiverRecord::value);
     }
 
+    public Flux<String> getScoresViaAuthCall() {
+        return kafkaScoreReceiver.receive()
+                .doOnNext(r -> r.receiverOffset().acknowledge())
+                .map(ReceiverRecord::value)
+                .map(e -> "AUTHENTICATED:" + e);
+    }
+
     public Flux<String> getTeamNamesInCall() {
         return kafkaScoreReceiver2.receive()
                 .doOnNext(r -> r.receiverOffset().acknowledge())

@@ -42,6 +42,12 @@ public class WebFluxScoreController {
         return ResponseEntity.ok(scoreService.getScoresViaCall());
     }
 
+    @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
+    @GetMapping(value = "/auth/kafka/webflux", produces = "text/event-stream")
+    ResponseEntity<Flux<String>> getKafkaScoresAuthOnly() {
+        return ResponseEntity.ok(scoreService.getScoresViaAuthCall());
+    }
+
     @GetMapping(value = "/kafka/webflux/callme", produces = "text/event-stream")
     Flux<String> getScoresCallingScoreService() {
         return scoreService.getScoresViaCall();
