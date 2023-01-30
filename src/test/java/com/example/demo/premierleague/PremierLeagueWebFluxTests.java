@@ -4,25 +4,31 @@ import com.example.demo.premierleague.controllers.WebFluxScoreController;
 import com.example.demo.premierleague.services.ScoreService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.client.ExchangeFilterFunctions;
 import reactor.core.publisher.Flux;
-
 import java.util.Arrays;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
 
 @WebFluxTest
 @ContextConfiguration(classes = TestConfiguration.class)
 class PremierLeagueWebFluxTests {
 
     private WebTestClient webClient;
+    private WebTestClient secureWebClient;
+
+    @Autowired
+    ApplicationContext context;
 
     @MockBean
     private ScoreService service;
@@ -30,6 +36,11 @@ class PremierLeagueWebFluxTests {
     @BeforeEach
     void initClient() {
         webClient = WebTestClient.bindToController(new WebFluxScoreController(service)).build();
+        secureWebClient = WebTestClient.bindToApplicationContext(this.context)
+                .apply(springSecurity())
+                .configureClient()
+                .filter(ExchangeFilterFunctions.basicAuthentication("user", "password"))
+                .build();
     }
 
     /**
@@ -49,7 +60,6 @@ class PremierLeagueWebFluxTests {
         };
         when(service.getScoresViaCall())
                 .thenReturn(Flux.just(scoreArray));
-
         //Call the client using the mock service
         List<String> scoreList = webClient.get().uri("/kafka/webflux")
                 .accept(MediaType.TEXT_EVENT_STREAM)
@@ -77,8 +87,9 @@ class PremierLeagueWebFluxTests {
                 .thenReturn(Flux.just(scoreArray));
 
         //Call the client using the mock service
-        List<String> scoreList = webClient.get().uri("/auth/kafka/webflux")
+        List<String> scoreList = secureWebClient.get().uri("/auth/kafka/webflux")
                 .accept(MediaType.TEXT_EVENT_STREAM)
+                .headers(headers -> headers.setBasicAuth("user", "password"))
                 .exchange()
                 .expectStatus().is2xxSuccessful()
                 .expectBodyList(String.class)
