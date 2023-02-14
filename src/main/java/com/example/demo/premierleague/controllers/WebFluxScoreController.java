@@ -1,5 +1,6 @@
 package com.example.demo.premierleague.controllers;
 
+import com.example.demo.premierleague.pojo.Score;
 import com.example.demo.premierleague.services.ScoreService;
 import com.example.demo.services.InfiniteService;
 import org.springframework.context.annotation.Bean;
@@ -41,9 +42,9 @@ public class WebFluxScoreController {
     //Equivalent to above
 
     @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
-    @GetMapping(value = "/kafka/webflux", produces = "application/x-ndjson")
-    ResponseEntity<Flux<String>> getKafkaScores() {
-        return ResponseEntity.ok(scoreService.getScoresViaCall());
+    @GetMapping(value = "/kafka/webflux", produces = MediaType.APPLICATION_NDJSON_VALUE)
+    ResponseEntity<Flux<Score>> getKafkaScores() {
+        return ResponseEntity.ok(scoreService.getScoresViaCall().map(Score::new));
     }
 
     @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
