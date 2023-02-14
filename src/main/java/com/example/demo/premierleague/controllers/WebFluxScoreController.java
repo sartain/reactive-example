@@ -1,6 +1,7 @@
 package com.example.demo.premierleague.controllers;
 
 import com.example.demo.premierleague.services.ScoreService;
+import com.example.demo.services.InfiniteService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -14,6 +15,7 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.util.List;
 
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
@@ -30,20 +32,22 @@ public class WebFluxScoreController {
     @Bean
     RouterFunction<ServerResponse> getScoresViaKafka() {
         return route()
-                .GET("/kafka", r -> ServerResponse.ok().contentType(MediaType.TEXT_EVENT_STREAM).body(scoreService.getScoresViaCall(), String.class))
+                .GET("/kafka", r -> ServerResponse.ok()
+                        .contentType(MediaType.TEXT_EVENT_STREAM)
+                        .body(scoreService.getScoresViaCall(), String.class))
                 .build();
     }
 
     //Equivalent to above
 
     @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
-    @GetMapping(value = "/kafka/webflux", produces = "text/event-stream")
+    @GetMapping(value = "/kafka/webflux", produces = "application/x-ndjson")
     ResponseEntity<Flux<String>> getKafkaScores() {
         return ResponseEntity.ok(scoreService.getScoresViaCall());
     }
 
     @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
-    @GetMapping(value = "/auth/kafka/webflux", produces = "text/event-stream")
+    @GetMapping(value = "/auth/kafka/webflux", produces = "application/json")
     ResponseEntity<Flux<String>> getKafkaScoresAuthOnly() {
         return ResponseEntity.ok(scoreService.getScoresViaAuthCall());
     }
