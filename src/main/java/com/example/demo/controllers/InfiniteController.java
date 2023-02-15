@@ -12,6 +12,8 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
+
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @RestController
@@ -51,6 +53,21 @@ public class InfiniteController {
     @GetMapping(value = "/reservation/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     ResponseEntity<Flux<IcaoData>> getReservationEventStream() {
         return ResponseEntity.ok(infiniteService.manyIcao());
+    }
+
+    @GetMapping(value = "/flux/error/resume", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    ResponseEntity<Flux<IcaoData>> getErrorFlux() {
+        return ResponseEntity.ok(infiniteService.manyIcaoOnErrorResume());
+    }
+
+    @GetMapping(value = "/flux/error/return", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    ResponseEntity<Flux<IcaoData>> getErrorFluxReturn() {
+        return ResponseEntity.ok(infiniteService.manyIcaoOnErrorReturn());
+    }
+
+    @GetMapping(value = "/reservation/buffered")
+    ResponseEntity<Flux<IcaoData>> getBufferedReservations() {
+        return ResponseEntity.ok(infiniteService.manyIcaoBuffered().delayElements(Duration.ofSeconds(1)));
     }
 
 }
