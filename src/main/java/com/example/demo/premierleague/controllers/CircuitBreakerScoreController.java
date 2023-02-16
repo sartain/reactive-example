@@ -17,12 +17,11 @@ public class CircuitBreakerScoreController {
     //Example of making another call to the API which communicates with Kafka
     @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
     @GetMapping(value = "/kafka/double", produces = "text/event-stream")
-    ResponseEntity<Flux<Score>> getKafkaScoresViaCall() {
-        return ResponseEntity.ok(WebClient.builder().build().get()
+    Flux<Score> getKafkaScoresViaCall() {
+        return WebClient.builder().build().get()
                 .uri("http://localhost:8080/kafka/webflux")
                 .retrieve()
-                .bodyToFlux(Score.class)
-        );
+                .bodyToFlux(Score.class);
     }
 
 }

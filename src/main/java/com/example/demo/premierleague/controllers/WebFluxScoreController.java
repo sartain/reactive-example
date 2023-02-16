@@ -44,14 +44,14 @@ public class WebFluxScoreController {
 
     @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
     @GetMapping(value = "/kafka/webflux", produces = MediaType.APPLICATION_NDJSON_VALUE)
-    ResponseEntity<Flux<Score>> getKafkaScores() {
-        return ResponseEntity.ok(scoreService.getScoresViaCall().map(Score::new));
+    Flux<Score> getKafkaScores() {
+        return scoreService.getScoresViaCall().map(Score::new);
     }
 
     @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
     @GetMapping(value = "/auth/kafka/webflux", produces = "application/json")
-    ResponseEntity<Flux<String>> getKafkaScoresAuthOnly() {
-        return ResponseEntity.ok(scoreService.getScoresViaAuthCall());
+    Flux<String> getKafkaScoresAuthOnly() {
+        return scoreService.getScoresViaAuthCall();
     }
 
     @GetMapping(value = "/kafka/webflux/callme", produces = "text/event-stream")
@@ -62,8 +62,8 @@ public class WebFluxScoreController {
     //Example of applying some logic to the response
 
     @GetMapping(value = "/kafka/webflux/teams", produces = "text/event-stream")
-    ResponseEntity<Flux<String>> getKafkaTeams() {
-        return ResponseEntity.ok(scoreService.getTeamNamesInCall());
+    Flux<String> getKafkaTeams() {
+        return scoreService.getTeamNamesInCall();
     }
 
     //Example of an MVC calling the reactive system to get score updates
@@ -81,7 +81,7 @@ public class WebFluxScoreController {
     // For example purposes only
     // Highlight how unnecessary webflux is if pipeline is blocking
 
-    @GetMapping(value = "/sundayscores/here", produces = "text/event-stream")
+    @GetMapping(value = "/sundayscores/here", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     ResponseEntity<List<String>> getSundayScores() {
         RestTemplate template = new RestTemplate();
         return template.exchange("http://localhost:8080/sundayscores",
@@ -92,12 +92,11 @@ public class WebFluxScoreController {
     }
 
     @GetMapping(value = "/sundayscores/webflux")
-    ResponseEntity<Flux<String>> getSundayScoresWebFlux() {
-        return ResponseEntity.ok(WebClient.builder().build().get()
+    Flux<String> getSundayScoresWebFlux() {
+        return WebClient.builder().build().get()
                 .uri("http://localhost:8080/sundayscores/here")
                 .retrieve()
-                .bodyToFlux(String.class)
-        );
+                .bodyToFlux(String.class);
     }
 
 }
