@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
@@ -75,6 +76,28 @@ public class WebFluxScoreController {
                 null,
                 new ParameterizedTypeReference<>() {
                 });
+    }
+
+    // For example purposes only
+    // Highlight how unnecessary webflux is if pipeline is blocking
+
+    @GetMapping(value = "/sundayscores/here", produces = "text/event-stream")
+    ResponseEntity<List<String>> getSundayScores() {
+        RestTemplate template = new RestTemplate();
+        return template.exchange("http://localhost:8080/sundayscores",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                });
+    }
+
+    @GetMapping(value = "/sundayscores/webflux")
+    ResponseEntity<Flux<String>> getSundayScoresWebFlux() {
+        return ResponseEntity.ok(WebClient.builder().build().get()
+                .uri("http://localhost:8080/sundayscores/here")
+                .retrieve()
+                .bodyToFlux(String.class)
+        );
     }
 
 }
